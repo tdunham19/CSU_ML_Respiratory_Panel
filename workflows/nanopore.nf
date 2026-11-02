@@ -5,7 +5,7 @@ nextflow.enable.dsl=2
 // include modules from nf-core
 include { DEMUX											 	 	  } from '../modules/nf_core/cutadapt/demux_main.nf'
 // include { NANOPLOT as NANOPLOT_PRE_TRIM					 	 	  } from '../modules/nf_core/nanoplot/main.nf'
-// include { PORECHOP										 	 	  } from '../modules/nf_core/porechop/main.nf'
+include { PORECHOP										 	 	  } from '../modules/nf_core/porechop/main.nf'
 // include { TRIM_UMIS										 	 	  } from '../modules/nf_core/cutadapt/main.nf'
 // include { TRIM_ARMS										 	 	  } from '../modules/nf_core/cutadapt/main.nf'
 // include { NANOPLOT as NANOPLOT_POST_TRIM					 	  } from '../modules/nf_core/nanoplot/main.nf'
@@ -62,11 +62,21 @@ workflow NANOPORE_WORKFLOW {
   // demultiplex raw Nanopore reads
   DEMUX ( ch_inputreads, ch_barcode )
   
+  demux_reads = DEMUX.out.reads
+    .flatMap { meta, reads ->
+    reads.collect { read ->
+    	def sample_id = read.baseName
+        .replaceFirst(/_demux$/, '')
+        def new_meta = meta + [id: sample_id]
+        tuple(new_meta, read)
+        }
+    }
+  
   // run Nanoplot on demuxed fastq files
   // NANOPLOT_PRE_TRIM ( DEMUX.out.reads )
   
   // trim adapters using porechop
-  // PORECHOP ( DEMUX.out.reads )
+  PORECHOP ( demux_reads )
   
   // trim UMIs using cutadapt
   // TRIM_UMIS ( PORECHOP.out.reads )
