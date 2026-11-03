@@ -12,6 +12,7 @@ include { NANOPLOT as NANOPLOT_POST_TRIM					 	  } from '../modules/nf_core/nano
 include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_TO_REF  	 			  } from '../modules/nf_core/minimap2_align/main.nf'
 include { SAMTOOLS_IDXSTATS 									  } from '../modules/nf_core/samtools/idxstats/main.nf'
 include { BAMTOOLS_SPLIT as SPLIT_BAM_BY_TARGET              	  } from '../modules/nf_core/bamtools_split/main.nf'
+include { CLEAN_BAM_HEADER              	 			          } from '../modules/nf_core/samtools/idxstats/clean_bam_main.nf'
 include { VIRAL_CONSENSUS as CALL_INDIVIDUAL_CONSENSUS            } from '../modules/local/viral_consensus/main.nf'
 // include { REMOVE_TRAILING_FASTA_NS								} from '../modules/local/remove_trailing_fasta_ns/main.nf'
 // include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_CONSENSUS		   	    } from '../modules/nf_core/minimap2/align/main.nf'
@@ -109,7 +110,7 @@ workflow NANOPORE_WORKFLOW {
   // separate, one bam for each target being aligned to
   SPLIT_BAM_BY_TARGET ( mapped_bams )
   
-  // ensure bams are in unique channels	
+  // ensure bams are in unique channels and have the target associated	
   split_bams = SPLIT_BAM_BY_TARGET.out.bam.flatMap { meta, bam_or_bams ->
   def bam_list = bam_or_bams instanceof List ? bam_or_bams : [ bam_or_bams ]
         		 bam_list.collect { bam ->
@@ -120,6 +121,9 @@ workflow NANOPORE_WORKFLOW {
                    [id: target],
                    bam)}
                    }
+                   
+  // ensure that .bam header only has a single reference
+  CLEAN_BAM_HEADER ( split_bams )
 	
   // split up targets into individual sequences because viral_consensus
   // can only work on one sequence at a time
@@ -135,8 +139,7 @@ workflow NANOPORE_WORKFLOW {
   
   // this uses the nextflow combine operator to create a new channel
   // that contains the reads for each dataset and all individual fasta files 
-  // individual_fasta_ch = split_bams.combine(individual_references, by: 0)
-  individual_fasta_ch = split_bams.join(individual_references)
+  individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.combine(individual_references, by: 0)
 
   // parameters related consensus calling: min depth, basecall quality, frequency for consensus calling
   min_depth_ch = Channel.value(params.nanopore_min_depth)
