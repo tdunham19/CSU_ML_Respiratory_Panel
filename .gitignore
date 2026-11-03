@@ -1,4 +1,4 @@
 work/
 results/
 .nextflow.lo*
-.nextflow/
+/.nextflow/
