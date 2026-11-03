@@ -15,7 +15,7 @@ include { BAMTOOLS_SPLIT as SPLIT_BAM_BY_TARGET              	  } from '../modul
 include { CLEAN_BAM_HEADER              	 			          } from '../modules/nf_core/samtools/idxstats/clean_bam_main.nf'
 include { VIRAL_CONSENSUS as CALL_INDIVIDUAL_CONSENSUS            } from '../modules/local/viral_consensus/main.nf'
 include { REMOVE_TRAILING_FASTA_NS								  } from '../modules/local/remove_trailing_fasta_ns/main.nf'
-// include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_CONSENSUS		   	    } from '../modules/nf_core/minimap2/align/main.nf'
+include { MINIMAP2_ALIGN_CONSENSUS		   	  				      } from '../modules/nf_core/minimap2_align/main.nf'
 
 
 workflow NANOPORE_WORKFLOW {
@@ -152,8 +152,18 @@ workflow NANOPORE_WORKFLOW {
   // pipe output through remove_trailing_fasta_Ns to strip N characters from beginning and ends of seqs
   REMOVE_TRAILING_FASTA_NS ( CALL_INDIVIDUAL_CONSENSUS.out.fasta )
   
-  // map reads back to final consensus
-  // MINIMAP2_ALIGN_CONSENSUS (  )
+  // filter out empty fasta files
+  INDIVIDUAL_CONSENSUS_SEQUENCE_FILTERED = REMOVE_TRAILING_FASTA_NS.out.filter { meta, fasta ->
+    fasta.text.readLines().find { it && !it.startsWith(">") } != null 
+    }
+
+  // join the reads with the consensus sequence
+  consensus_alignment_input = TRIM_ARMS.out.reads.map { meta, reads -> tuple(meta.id, meta, reads)}
+       						  .join(INDIVIDUAL_CONSENSUS_SEQUENCE_FILTERED.map { meta, fasta -> tuple(meta.id, meta, fasta)})
+        		              .map { id, read_meta, reads, consensus_meta, fasta -> tuple(consensus_meta, reads, fasta)} 
+
+  // re-align data against the new draft sequence (ie. final consensus sequence) using minimap2.
+  MINIMAP2_ALIGN_CONSENSUS(consensus_alignment_input, "align.to.consensus")
     
   // pull alignment statistics using samtools flagstat
   // final multiqc
