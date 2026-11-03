@@ -6,7 +6,7 @@ nextflow.enable.dsl=2
 include { DEMUX											 	 	  } from '../modules/nf_core/cutadapt/demux_main.nf'
 // include { NANOPLOT as NANOPLOT_PRE_TRIM					 	 	  } from '../modules/nf_core/nanoplot/main.nf'
 include { PORECHOP										 	 	  } from '../modules/nf_core/porechop/main.nf'
-// include { TRIM_UMIS										 	 	  } from '../modules/nf_core/cutadapt/main.nf'
+include { TRIM_UMIS										 	 	  } from '../modules/nf_core/cutadapt/trim_umis_main.nf'
 // include { TRIM_ARMS										 	 	  } from '../modules/nf_core/cutadapt/main.nf'
 // include { NANOPLOT as NANOPLOT_POST_TRIM					 	  } from '../modules/nf_core/nanoplot/main.nf'
 // include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_TO_REF  	 				     		  } from '../modules/nf_core/minimap2/align/main.nf'
@@ -79,7 +79,7 @@ workflow NANOPORE_WORKFLOW {
   PORECHOP ( demux_reads )
   
   // trim UMIs using cutadapt
-  // TRIM_UMIS ( PORECHOP.out.reads )
+  TRIM_UMIS ( PORECHOP.out.reads )
   
   // trim ARMS using cutadapt
   // TRIM_ARMS ( TRIM_UMIS.out.reads )
