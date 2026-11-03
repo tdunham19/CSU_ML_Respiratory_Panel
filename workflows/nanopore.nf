@@ -12,8 +12,7 @@ include { NANOPLOT as NANOPLOT_POST_TRIM					 	  } from '../modules/nf_core/nano
 include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_TO_REF  	 			  } from '../modules/nf_core/minimap2_align/main.nf'
 include { SAMTOOLS_IDXSTATS 									  } from '../modules/nf_core/samtools/idxstats/main.nf'
 include { BAMTOOLS_SPLIT as SPLIT_BAM_BY_TARGET              	  } from '../modules/nf_core/bamtools_split/main.nf'
-// include { EXTRACT_REFERENCE              	 	 			    } from '../modules/nf_core/nanoplot/main.nf'
-// include { CALL_INDIVIDUAL_CONSENSUS          	 	  			} from '../subworkflows/call_individual_consensus_nanopore.nf'
+include { VIRAL_CONSENSUS as CALL_INDIVIDUAL_CONSENSUS            } from '../modules/local/viral_consensus/main.nf'
 // include { REMOVE_TRAILING_FASTA_NS								} from '../modules/local/remove_trailing_fasta_ns/main.nf'
 // include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_CONSENSUS		   	    } from '../modules/nf_core/minimap2/align/main.nf'
 
@@ -39,7 +38,7 @@ workflow NANOPORE_WORKFLOW {
   
   // refseq input files
 
-    Channel.fromPath("${params.reference}")
+    Channel.fromPath("${params.reference}", checkIfExists: true)
     .collect()
     .map { reference ->
             def meta2 = [:]
@@ -107,14 +106,56 @@ workflow NANOPORE_WORKFLOW {
         tuple(meta, bam)
     }
   
-  // separate bam file by target being aligned to
+  // separate, one bam for each target being aligned to
   SPLIT_BAM_BY_TARGET ( mapped_bams )
   
+  // ensure bams are in unique channels	
+	split_bams = SPLIT_BAM_BY_TARGET.out.bam
+    .flatMap { meta, bam_or_bams ->
+
+        def bam_list = bam_or_bams instanceof List ? bam_or_bams : [ bam_or_bams ]
+
+        bam_list.collect { bam ->
+
+            def target = bam.getFileName().toString()
+                            .replaceFirst(/^.*REF_/, '')
+                            .replaceFirst(/\.bam$/, '')
+
+            tuple(
+                [id: target],
+                bam
+            )
+        }
+    }
+	
+  // split up targets into individual sequences because viral_consensus
+  // can only work on one sequence at a time
+  // see: https://www.nextflow.io/docs/latest/reference/operator.html#splitfasta  
+  Channel.fromPath("${params.reference}", checkIfExists: true)
+    .splitFasta(by: 1, record: [id:true, sequence:true])
+    .map { record ->
+        def fasta = file("${record.id}.fa")
+        fasta.text = ">${record.id}\n${record.sequence}\n"
+        tuple([id: record.id], fasta)
+    }
+    .set { individual_references }
+  
+  // this uses the nextflow combine operator to create a new channel
+  // that contains the reads for each dataset and all individual fasta files 
+  // individual_fasta_ch = split_bams.combine(individual_references, by: 0)
+  individual_fasta_ch = split_bams.join(individual_references)
+
+  // parameters related consensus calling: min depth, basecall quality, frequency for consensus calling
+  min_depth_ch = Channel.value(params.nanopore_min_depth)
+  min_qual_ch  = Channel.value(params.nanopore_min_qual)
+  min_freq_ch  = Channel.value(params.nanopore_min_freq)
+  CALL_INDIVIDUAL_CONSENSUS(individual_fasta_ch, min_qual_ch, min_depth_ch, min_freq_ch)
+     
   // extract each target reference in alignment
-  // EXTRACT_REFERENCE (  )
+  // EXTRACT_REFERENCE ( split_bams, ch_reference )
   
   // call individual consensus sequences for each target
-  // CALL_INDIVIDUAL_CONSENSUS (  )
+  // CALL_INDIVIDUAL_CONSENSUS ( split_bams, ch_reference )
   
   // remove any trailing Ns
   // REMOVE_TRAILING_FASTA_NS (  )
