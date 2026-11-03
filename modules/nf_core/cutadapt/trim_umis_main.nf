@@ -3,7 +3,8 @@
 
 process TRIM_UMIS {
     tag "$meta.id"
-    label 'process_medium'
+    // label 'process_medium'
+    label "no_publish"
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity'] && !task.ext.singularity_pull_docker_container ?
