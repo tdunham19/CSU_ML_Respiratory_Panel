@@ -7,10 +7,11 @@ include { DEMUX											 	 	  } from '../modules/nf_core/cutadapt/demux_main.n
 // include { NANOPLOT as NANOPLOT_PRE_TRIM					 	 	  } from '../modules/nf_core/nanoplot/main.nf'
 include { PORECHOP										 	 	  } from '../modules/nf_core/porechop/main.nf'
 include { TRIM_UMIS										 	 	  } from '../modules/nf_core/cutadapt/trim_umis_main.nf'
-// include { TRIM_ARMS										 	 	  } from '../modules/nf_core/cutadapt/main.nf'
+include { TRIM_ARMS										 	 	  } from '../modules/nf_core/cutadapt/trim_arms_main.nf'
 // include { NANOPLOT as NANOPLOT_POST_TRIM					 	  } from '../modules/nf_core/nanoplot/main.nf'
 // include { MINIMAP2_ALIGN as MINIMAP2_ALIGN_TO_REF  	 				     		  } from '../modules/nf_core/minimap2/align/main.nf'
 // include { CALL_INDIVIDUAL_CONSENSUS_NANOPORE              	 	  } from '../subworkflows/call_individual_consensus_nanopore.nf'
+// dont need to include the rename steps?
 // include { RENAME_ONE_ALN									 	  } from '../modules/local/rename_one_aln/main.nf'
 // include { RENAME_ONE_FASTA		 	  							  } from '../modules/local/rename_one_fasta/main.nf'
 // include { CONCATENATE_FILES       	 							  } from '../modules/stenglein_lab/concatenate_files/main.nf'
@@ -82,13 +83,18 @@ workflow NANOPORE_WORKFLOW {
   TRIM_UMIS ( PORECHOP.out.reads )
   
   // trim ARMS using cutadapt
-  // TRIM_ARMS ( TRIM_UMIS.out.reads )
+  TRIM_ARMS ( TRIM_UMIS.out.reads )
     
   // run Nanoplot on trimmed fastq files
   // NANOPLOT_POST_TRIM ( TRIM_ARMS.out.reads )
   
   // align trimmed reads using minimap2
   // MINIMAP2_ALIGN_TO_REF ( TRIM_ARMS.out.reads, ch_reference, "_refseq" )
+  
+  // generate consensus sequence to calculate coverage from
+  // pull alignment statistics using samtools flagstat
+  // final multiqc
+  // final table with target, reads aligned, genome coverage, and an overall Y/N/suspect result
 
   }
   
