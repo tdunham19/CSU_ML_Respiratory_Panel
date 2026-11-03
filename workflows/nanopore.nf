@@ -110,23 +110,16 @@ workflow NANOPORE_WORKFLOW {
   SPLIT_BAM_BY_TARGET ( mapped_bams )
   
   // ensure bams are in unique channels	
-	split_bams = SPLIT_BAM_BY_TARGET.out.bam
-    .flatMap { meta, bam_or_bams ->
-
-        def bam_list = bam_or_bams instanceof List ? bam_or_bams : [ bam_or_bams ]
-
-        bam_list.collect { bam ->
-
-            def target = bam.getFileName().toString()
+  split_bams = SPLIT_BAM_BY_TARGET.out.bam.flatMap { meta, bam_or_bams ->
+  def bam_list = bam_or_bams instanceof List ? bam_or_bams : [ bam_or_bams ]
+        		 bam_list.collect { bam ->
+            	 def target = bam.getFileName().toString()
                             .replaceFirst(/^.*REF_/, '')
                             .replaceFirst(/\.bam$/, '')
-
-            tuple(
-                [id: target],
-                bam
-            )
-        }
-    }
+                   tuple(
+                   [id: target],
+                   bam)}
+                   }
 	
   // split up targets into individual sequences because viral_consensus
   // can only work on one sequence at a time
@@ -151,12 +144,6 @@ workflow NANOPORE_WORKFLOW {
   min_freq_ch  = Channel.value(params.nanopore_min_freq)
   CALL_INDIVIDUAL_CONSENSUS(individual_fasta_ch, min_qual_ch, min_depth_ch, min_freq_ch)
      
-  // extract each target reference in alignment
-  // EXTRACT_REFERENCE ( split_bams, ch_reference )
-  
-  // call individual consensus sequences for each target
-  // CALL_INDIVIDUAL_CONSENSUS ( split_bams, ch_reference )
-  
   // remove any trailing Ns
   // REMOVE_TRAILING_FASTA_NS (  )
   
