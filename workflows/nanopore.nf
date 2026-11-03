@@ -113,14 +113,14 @@ workflow NANOPORE_WORKFLOW {
   // ensure bams are in unique channels and have the target associated	
   split_bams = SPLIT_BAM_BY_TARGET.out.bam.flatMap { meta, bam_or_bams ->
   def bam_list = bam_or_bams instanceof List ? bam_or_bams : [ bam_or_bams ]
-        		 bam_list.collect { bam ->
-            	 def target = bam.getFileName().toString()
-                            .replaceFirst(/^.*REF_/, '')
-                            .replaceFirst(/\.bam$/, '')
-                   tuple(
-                   [id: target],
-                   bam)}
-                   }
+    			 bam_list.collect { bam ->
+        		 def target = bam.getFileName().toString()
+            	 .replaceFirst(/^.*REF_/, '')
+            	 .replaceFirst(/\.bam$/, '')
+		         tuple(
+           		 meta + [target: target],
+            	 bam)}
+            	 }
                    
   // ensure that .bam header only has a single reference
   CLEAN_BAM_HEADER ( split_bams )
@@ -130,16 +130,18 @@ workflow NANOPORE_WORKFLOW {
   // see: https://www.nextflow.io/docs/latest/reference/operator.html#splitfasta  
   Channel.fromPath("${params.reference}", checkIfExists: true)
     .splitFasta(by: 1, record: [id:true, sequence:true])
-    .map { record ->
-        def fasta = file("${record.id}.fa")
-        fasta.text = ">${record.id}\n${record.sequence}\n"
-        tuple([id: record.id], fasta)
-    }
+    .map { record -> def fasta = file("${record.id}.fa")
+        			 fasta.text = ">${record.id}\n${record.sequence}\n"
+		             tuple([target: record.id], fasta)
+		             }
     .set { individual_references }
   
   // this uses the nextflow combine operator to create a new channel
   // that contains the reads for each dataset and all individual fasta files 
-  individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.combine(individual_references, by: 0)
+  // individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.combine(individual_references, by: 0)
+  individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.map { meta, bam -> tuple(meta.target, meta, bam) }
+  						.combine(individual_references.map { meta, fasta -> tuple(meta.target, fasta) }, by: 0)
+        			    .map { target, meta, bam, fasta -> tuple(meta, bam, fasta)}
 
   // parameters related consensus calling: min depth, basecall quality, frequency for consensus calling
   min_depth_ch = Channel.value(params.nanopore_min_depth)

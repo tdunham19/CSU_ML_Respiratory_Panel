@@ -3,7 +3,8 @@
 
 process CLEAN_BAM_HEADER {
     tag "${meta.id}"
-    label 'process_single'
+    // label 'process_single'
+    label "no_publish"
 
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container

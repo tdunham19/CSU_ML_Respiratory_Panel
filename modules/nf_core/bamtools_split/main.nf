@@ -3,8 +3,8 @@
 
 process BAMTOOLS_SPLIT {
     tag "$meta.id"
-    label 'process_low'
-    // label "no_publish"
+    // label 'process_low'
+    label "no_publish"
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
