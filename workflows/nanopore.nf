@@ -134,11 +134,10 @@ workflow NANOPORE_WORKFLOW {
         			 fasta.text = ">${record.id}\n${record.sequence}\n"
 		             tuple([target: record.id], fasta)
 		             }
-    .set { individual_references }
+		             .set { individual_references }
   
   // this uses the nextflow combine operator to create a new channel
   // that contains the reads for each dataset and all individual fasta files 
-  // individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.combine(individual_references, by: 0)
   individual_fasta_ch = CLEAN_BAM_HEADER.out.bam.map { meta, bam -> tuple(meta.target, meta, bam) }
   						.combine(individual_references.map { meta, fasta -> tuple(meta.target, fasta) }, by: 0)
         			    .map { target, meta, bam, fasta -> tuple(meta, bam, fasta)}
@@ -174,4 +173,17 @@ workflow NANOPORE_WORKFLOW {
   // specify the entry point for the workflow
 workflow {
   NANOPORE_WORKFLOW()
+}
+
+workflow.onComplete {
+
+    def indiv_ref_dir = file(params.indiv_ref_dir)
+    indiv_ref_dir.mkdirs()
+
+    new File(workflow.launchDir.toString())
+        .listFiles()
+        .findAll { it.name.endsWith('.fa') }
+        .each { fasta ->
+            fasta.renameTo(new File(params.indiv_ref_dir, fasta.name))
+        }
 }
