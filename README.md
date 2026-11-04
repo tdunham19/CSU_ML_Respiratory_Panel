@@ -1,5 +1,5 @@
 [![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
-[![Singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
+[![Singularity](https://img.shields.io/badge/Singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
 The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read sequences produced by the 'CSU Molecular Loop Nanopore Workflow'.  
