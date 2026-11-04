@@ -1,4 +1,4 @@
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-supported-23aa62.svg\)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
