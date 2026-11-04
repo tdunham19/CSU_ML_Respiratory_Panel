@@ -16,7 +16,8 @@ include { CLEAN_BAM_HEADER              	 			          } from '../modules/nf_cor
 include { VIRAL_CONSENSUS as CALL_INDIVIDUAL_CONSENSUS            } from '../modules/local/viral_consensus/main.nf'
 include { REMOVE_TRAILING_FASTA_NS								  } from '../modules/local/remove_trailing_fasta_ns/main.nf'
 include { MINIMAP2_ALIGN_CONSENSUS		   	  				      } from '../modules/nf_core/minimap2_align/main.nf'
-
+include { FINAL_SUMMARY		   		   	  				          } from '../modules/local/create_summary/main.nf'
+// include { MERGE_SUMMARIES		   		   	  				      } from '../modules/local/merge_summary/main.nf'
 
 workflow NANOPORE_WORKFLOW {
 
@@ -163,10 +164,39 @@ workflow NANOPORE_WORKFLOW {
 
   // re-align data against the new draft sequence (ie. final consensus sequence) using minimap2.
   MINIMAP2_ALIGN_CONSENSUS(consensus_alignment_input, "align.to.consensus")
+  
+  // create summary channel
+  summary_input =
+    MINIMAP2_ALIGN_CONSENSUS.out.bam
+        .map { meta, bam ->
+            tuple(meta.target, meta, bam)
+        }
+        .join(
+            INDIVIDUAL_CONSENSUS_SEQUENCE_FILTERED
+                .map { meta, fasta ->
+                    tuple(meta.target, fasta)
+                }
+        )
+        .combine(
+            individual_references
+                .map { meta, ref ->
+                    tuple(meta.target, ref)
+                }
+        )
+        .filter { target1, meta, bam, consensus, target2, reference ->
+            target1 == target2
+        }
+        .map { target1, meta, bam, consensus, target2, reference ->
+            tuple(meta, bam, consensus, reference)
+        }
+             		  
+  // create final summary table
+  // contains: target, reads aligned, genome coverage, and an overall Y/N/suspect result
+  FINAL_SUMMARY( summary_input )
+  // MERGE_SUMMARIES( FINAL_SUMMARY.out.collect() )
     
   // pull alignment statistics using samtools flagstat
   // final multiqc
-  // final table with target, reads aligned, genome coverage, and an overall Y/N/suspect result
 
   }
   
