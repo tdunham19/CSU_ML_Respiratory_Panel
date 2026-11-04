@@ -181,13 +181,11 @@ workflow NANOPORE_WORKFLOW {
             tuple(meta, bam, consensus, reference)
         }
              		  
-  // create final summary table for each sample then merge into one
-  // contains: target, reads aligned, genome coverage, and an overall Y/N/suspect result
+  // create final summary table for each sample then merge into one with all samples
+  // contains: barcode, target, reads aligned, genome coverage, and an overall Y/N/suspect result
   CREATE_SUMMARY ( summary_input )
   MERGE_SUMMARIES ( CREATE_SUMMARY.out.collect() )
     
-  // final multiqc
-
   }
   
   // specify the entry point for the workflow
