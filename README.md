@@ -8,26 +8,26 @@ The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read seq
 [Molecular Loop Index Primer Kit for Nanopore Technologies](https://molecularloop.com/wp-content/uploads/2025/05/ML2100-ON_Product-Data-Sheet_v1.pdf)
 
 CSU Custom Respiratory Pathogen Targets:
-	1. Mycobacterium tuberculosis variant bovis 
-		a. Chromosome RvD1Rv2031c
-		b. Insertion Element IS6110 DNA
-	2. Cervid alphaherpesvirus 4
-	3. Influenza D virus
-		a. Segment 5 NP Gene
-		b. Segment 4 HE gene
-	4. Mycoplasma bovis
-	5. Mule deer alphaherpesvirus
-	6. Deerpox virus W-848-83
-		a. DNA polymerase CDS
-		b. Variola virus B22R-like protein CDS
-	7. Deer Mastadenovirus B
-	8. Odocoileus adenovirus 1
-	9. Type 2 ruminant rhadinovirus of mule deer
-	10. While-tailed deer coronavirus US/OH-WD470/1994
-		a. Spike protein CDS
-		b. ORF1a polyprotein CDS
-	11. BVDV2 (bovine viral diarrhea virus)
-	12. New Kent County Virus
+1. Mycobacterium tuberculosis variant bovis 
+	a. Chromosome RvD1Rv2031c
+	b. Insertion Element IS6110 DNA
+2. Cervid alphaherpesvirus 4
+3. Influenza D virus
+	a. Segment 5 NP Gene
+	b. Segment 4 HE gene
+4. Mycoplasma bovis
+5. Mule deer alphaherpesvirus
+6. Deerpox virus W-848-83
+	a. DNA polymerase CDS
+	b. Variola virus B22R-like protein CDS
+7. Deer Mastadenovirus B
+8. Odocoileus adenovirus 1
+9. Type 2 ruminant rhadinovirus of mule deer
+10. While-tailed deer coronavirus US/OH-WD470/1994
+	a. Spike protein CDS
+	b. ORF1a polyprotein CDS
+11. BVDV2 (bovine viral diarrhea virus)
+12. New Kent County Virus
 
 ## Contents
 - [Pipeline Overview](#Pipeline-Overview)
