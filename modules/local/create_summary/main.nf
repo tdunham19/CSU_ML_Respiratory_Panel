@@ -1,8 +1,8 @@
-process FINAL_SUMMARY {
+process CREATE_SUMMARY {
 
     tag "${meta.id}_${meta.target}"
-    label 'process_single'
-    // label "no_publish"
+    // label 'process_single'
+    label "no_publish"
     
     conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
@@ -37,12 +37,12 @@ process FINAL_SUMMARY {
    CONCLUSION=\$(awk \
     -v reads="\$READS" \
     -v yes="${params.reads_yes_cutoff}" \
-    -v maybe="${params.reads_maybe_cutoff}" \
+    -v suspect="${params.reads_suspect_cutoff}" \
     'BEGIN{
         if(reads >= yes)
             print "Yes"
-        else if(reads > maybe)
-            print "Maybe"
+        else if(reads > suspect)
+            print "Suspect"
         else
             print "No"
     }')

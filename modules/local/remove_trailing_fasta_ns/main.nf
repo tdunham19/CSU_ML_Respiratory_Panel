@@ -1,7 +1,8 @@
 process REMOVE_TRAILING_FASTA_NS {
    tag "$meta.id"
-   label "no_publish"
-    
+   label 'process_single'
+   // label "no_publish"
+        
    // conda "${moduleDir}/environment.yml"
         
 	input: 
