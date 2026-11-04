@@ -7,7 +7,19 @@ The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read seq
 [Molecular Loop Workflow](https://molecularloop.com/wp-content/uploads/2026/09/Multiplex-Viral-RNA-Target-Capture-Protocol_ONT_v1.0.pdf)
 [Molecular Loop Index Primer Kit for Nanopore Technologies](https://molecularloop.com/wp-content/uploads/2025/05/ML2100-ON_Product-Data-Sheet_v1.pdf)
 
-CSU Custom Respiratory Pathogen Targets:
+## Contents
+- [Assay Targets](#Assay-Targets)
+- [Pipeline Overview](#Pipeline-Overview)
+- [Input Files](#Input-Files)
+- [Output Files](#Output-Files)
+- [Workflow Steps](#Workflow-Steps)
+- [Running the Pipeline](#Running-the-Pipeline)
+- [Stopping and Resuming](#Stopping-and-Resuming)
+- [Dependencies](#Dependencies)
+
+## Assay Targets 
+### CSU Custom Respiratory Pathogen Panel
+
 1. Mycobacterium tuberculosis variant bovis 
 	- Chromosome RvD1Rv2031c
 	- Insertion Element IS6110 DNA
@@ -29,20 +41,18 @@ CSU Custom Respiratory Pathogen Targets:
 11. BVDV2 (bovine viral diarrhea virus)
 12. New Kent County Virus
 
-## Contents
-- [Pipeline Overview](#Pipeline-Overview)
-- [Input Files](#Input-Files)
-- [Output Files](#Output-Files)
-- [Workflow Steps](#Workflow-Steps)
-- [Running the Pipeline](#Running-the-Pipeline)
-- [Stopping and Resuming](#Stopping-and-Resuming)
-- [Dependencies](#Dependencies)
-
-
 ## Pipeline Overview
+
+
 ## Input Files
+
+
 ## Output Files
+
+
 ## Workflow Steps
+
+
 ## Running the Pipeline
 
 
