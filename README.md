@@ -95,15 +95,15 @@ Barcode file containing ML2100 indexes that are used.
 
 
 ## Workflow Steps
-1. Demultiplex reads into individual barcode files: cutadapt
+1. Demultiplex reads into individual barcode files: Cutadapt
 2. Quality assessment of demultiplexed input reads: NanoPlot
-3. Trimming of Nanopore adapters: porechop
-4. Trimming of Molecular Loop UMIs and arms: cutadapt
+3. Trimming of Nanopore adapters: Porechop
+4. Trimming of Molecular Loop UMIs and arms: Cutadapt
 5. Quality assessment of trimmed reads: NanoPlot
 6. Alignment against all gene targets (n=17): Minimap2
-7. Filter out empty alignments & separate into one alignment per barcode and target: samtools
+7. Filter out empty alignments & separate into one alignment per barcode and target: Samtools
 8. Call consensus sequences for each individual target: ViralConsensus
-9. Calculate genome coverage and collate results table: samtools
+9. Calculate genome coverage and collate results table: Samtools
 
 
 ## Running the Pipeline
@@ -122,7 +122,7 @@ nextflow run main.nf --fastq_dir --barcode --outdir
 
 ## Test Pipeline
 
-To test if the pipeline is working properly the pipeline is provided with a small test file. 
+To test if the pipeline is working properly the pipeline is provided with a [test file](/test/). 
 
 The testing is successful if the pipeline completes all steps with no errors.
 ```

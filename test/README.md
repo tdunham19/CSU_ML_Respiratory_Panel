@@ -12,9 +12,9 @@ These datasets include:
 | ------- | -------- |
 | barcode1 | BVDV2 |
 | barcode2 | Mule Deer Herpes (HVC-1) |
+| barcode33 | Mule Deer Herpes (HVC-1) |
+| barcode89 | Mule Deer Herpes (HVC-1) |
 | barcode9 | BVDV2 |
-| barcode33 | BVDV2 |
-| barcode89 | BVDV2 |
 
 These datasets were created using seqtk and subseting for 8000 reads. 
 
