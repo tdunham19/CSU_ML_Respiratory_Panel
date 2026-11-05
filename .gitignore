@@ -3,3 +3,4 @@ results/
 .nextflow.lo*
 /.nextflow/
 *.fa
+*.html
