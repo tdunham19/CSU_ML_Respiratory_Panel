@@ -1,10 +1,6 @@
 ## Test datasets
 
-This directory contains a small test dataset. 
-
-The test dataset was created from a control run containing BVDV2 and HVC-1 controls. 
-
-Additionally metadata for the samples is included here: [test metadata](./test_metadata.xlsx)
+This directory contains a small test dataset created from a control run containing BVDV2 and HVC-1 controls. 
 
 These datasets include:
 
