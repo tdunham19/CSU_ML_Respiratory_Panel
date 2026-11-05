@@ -138,7 +138,7 @@ control(^) C
 
 - To resume the run add the -resume option
 ```
-nextflow run main.nf --fastq_dir --barcode -resume
+nextflow run main.nf --fastq_dir --barcode --outdir -resume
 ```
 
 ## Software Versions
