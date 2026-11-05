@@ -120,7 +120,7 @@ nextflow run main.nf --fastq_dir --barcode --outdir
 ```
 
 
-# Test Pipeline
+## Test Pipeline
 
 To test if the pipeline is working properly the pipeline is provided with a small test file. 
 
