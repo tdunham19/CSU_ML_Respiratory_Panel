@@ -76,7 +76,7 @@ Nanopore long reads generated using the [CSU Molecular Loop Nanopore Workflow](#
 Barcode file containing ML2100 indexes that are used.
 - IMPORTANT
 	- To reduce the chance of misclassification during demultiplexing, one barcode file containing ONLY THE USED/EXPECTED barcodes should be used. 
-	- The pipeline provides a file containing all 96 barcodes (/barcodes/ML_custom_sequences_withRC.fasta), the user can subset this based on the barcodes that were used. 
+	- The pipeline provides a file containing[all 96 barcodes](/barcodes/ML_custom_sequences_withRC.fasta), the user can subset this based on the barcodes that were used. 
 
 
 ## Output Files
