@@ -31,15 +31,15 @@ This workflow screens for 13 different respiratory pathogens covering 17 differe
 ### CSU Custom Respiratory Pathogen Panel
 
 1. Mycobacterium bovis 
-	- Mycobacterium tuberculosis variant bovis strain AF2122/97 chromosome RvD1Rv2031c
+	- Mycobacterium tuberculosis variant bovis chromosome RvD1Rv2031c
 	- Mycobacterium bovis insertion element IS6110 DNA
-2. While-tailed deer coronavirus (US/OH-WD470/1994)
+2. While-tailed deer coronavirus
 	- Spike protein CDS
 	- ORF1a polyprotein CDS
-3. Influenza D virus (D/bovine/Kansas/33/2019)
+3. Influenza D virus
 	- Segment 5 NP Gene
 	- Segment 4 HE gene
-4. Deerpox virus (W-848-83)
+4. Deerpox virus
 	- DNA polymerase CDS
 	- Variola virus B22R-like protein CDS
 5. Cervid alphaherpesvirus 4 (uracil-DNA glycosylase gene)
@@ -48,11 +48,11 @@ This workflow screens for 13 different respiratory pathogens covering 17 differe
 8. Deer Mastadenovirus B (DNA polymerase CDS)
 9. Odocoileus adenovirus 1 (DNA polymerase CDS)
 10. Type 2 ruminant rhadinovirus of mule deer (glycoprotein B and DNA polymerase genes)
-11. Bovine viral diarrhea virus 2 (OV852 complete genome)
-12. New Kent County Virus (RTS126 complete genome)
+11. Bovine viral diarrhea virus 2 (complete genome)
+12. New Kent County Virus (complete genome)
 13. Ovine herpesvirus 2 (glycoprotein B gene)
 
-GenBank Accessions for each of the target sequences can be found here: 'docs/assay_targets_metadata.pdf' 
+GenBank Accessions for each of the target sequences can be found here: [Assay Targets Metadata](docs/assay_targets_metadata.pdf)
 
 
 ## Pipeline Overview
