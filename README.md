@@ -5,7 +5,7 @@
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
 The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read sequences produced by the 'CSU Molecular Loop Nanopore Workflow'. 
-This workflow screens for 12 different respiratory pathogens covering 20 different gene targets. 
+This workflow screens for 13 different respiratory pathogens covering 17 different gene targets. 
 
 ## Contents
 - [CSU Molecular Loop Nanopore Workflow](#CSU-Molecular-Loop-Nanopore-Workflow)
@@ -30,44 +30,53 @@ This workflow screens for 12 different respiratory pathogens covering 20 differe
 ## Assay Targets 
 ### CSU Custom Respiratory Pathogen Panel
 
-1. Mycobacterium tuberculosis variant bovis 
-	- Chromosome RvD1Rv2031c
-	- Insertion Element IS6110 DNA
-2. Cervid alphaherpesvirus 4
-3. Influenza D virus
-	- Segment 5 NP Gene
-	- Segment 4 HE gene
-4. Mycoplasma bovis
-5. Mule deer alphaherpesvirus
-6. Deerpox virus W-848-83
-	- DNA polymerase CDS
-	- Variola virus B22R-like protein CDS
-7. Deer Mastadenovirus B
-8. Odocoileus adenovirus 1
-9. Type 2 ruminant rhadinovirus of mule deer
-10. While-tailed deer coronavirus US/OH-WD470/1994
+1. Mycobacterium bovis 
+	- Mycobacterium tuberculosis variant bovis strain AF2122/97 chromosome RvD1Rv2031c
+	- Mycobacterium bovis insertion element IS6110 DNA
+2. While-tailed deer coronavirus (US/OH-WD470/1994)
 	- Spike protein CDS
 	- ORF1a polyprotein CDS
-11. BVDV2 (bovine viral diarrhea virus)
-12. New Kent County Virus
+3. Influenza D virus (D/bovine/Kansas/33/2019)
+	- Segment 5 NP Gene
+	- Segment 4 HE gene
+4. Deerpox virus (W-848-83)
+	- DNA polymerase CDS
+	- Variola virus B22R-like protein CDS
+5. Cervid alphaherpesvirus 4 (uracil-DNA glycosylase gene)
+6. Mycoplasma bovis (uvrC gene)
+7. Mule deer alphaherpesvirus (envelope glycoprotein B gene)
+8. Deer Mastadenovirus B (DNA polymerase CDS)
+9. Odocoileus adenovirus 1 (DNA polymerase CDS)
+10. Type 2 ruminant rhadinovirus of mule deer (glycoprotein B and DNA polymerase genes)
+11. Bovine viral diarrhea virus 2 (OV852 complete genome)
+12. New Kent County Virus (RTS126 complete genome)
+13. Ovine herpesvirus 2 (glycoprotein B gene)
+
+GenBank Accessions for each of the target sequences can be found here: 'docs/assay_targets_metadata.pdf' 
 
 
 ## Pipeline Overview
 The CSU_ML_Respiratory_Panel is a nextflow pipeline that will perform demultiplexing, trimming, alignment, and consensus generation of Nanopore sequence data generated using the [CSU Molecular Loop Nanopore Workflow](#CSU-Molecular-Loop-Nanopore-Workflow). 
 - Demultiplexing is necessary in this workflow as there is no way to demultiplex the custom ML2100 indexes during Nanopore sequencing.
-	- Demultiplexed files are filtered and only barcodes with 20 reads or more are kept for downstream analysis. If users want demultiplexing to be more or less stringent they can modify these settings in the nextflow.config file (params.min_demux_reads). 
+	- Demultiplexed files are filtered and only barcodes with 5 reads or more are kept for downstream analysis. 
+	- If users want demultiplexing to be more or less stringent they can modify these settings in the nextflow.config file (params.min_demux_reads). 
 	- One input *.fastq.gz should be used at a time unless unique ML2100 indexes are used across runs.
+	- To reduce the chance of misclassification during demultiplexing, one barcode file containing ONLY THE USED/EXPECTED barcodes should be used. 
 - Preprocessing via trimming of the Nanopore adapters (porechop), molecular loop UMIs (cutadapt), and molecular loop arms (cuadapt) is also necessary. Final trimmed reads are provided for any further analysis.
-- Alignment is performed against 20 different gene targets (See [Assay Targets](#Assay-Targets)) and consensus sequences are generated from each individual target alignments. 
+- Alignment is performed against 17 different gene targets (See [Assay Targets](#Assay-Targets)) and consensus sequences are generated from each individual target alignments. 
 	- The pipeline generates consensus sequences using the following thresholds: minimum quality score of 5, depth of 2, and frequency of 0.25. Users can modify these settings in the nextflow.config file (nanopore_min_qual, nanopore_min_depth, & nanopore_min_freq).
 
 
 ## Input Files
 Nanopore long reads generated using the [CSU Molecular Loop Nanopore Workflow](#CSU-Molecular-Loop-Nanopore-Workflow)
+- IMPORTANT
+	- One input *.fastq.gz should be used at a time unless unique ML2100 indexes are used across runs. Demultiplexing cannot identify re-used barcodes across runs.
+	- Input files must be contained in a directory where it is the ONLY *.fastq.gz (it is recommended to create a new directory for the input raw reads).
 
-IMPORTANT
-- One input *.fastq.gz should be used at a time unless unique ML2100 indexes are used across runs. Demultiplexing cannot identify re-used barcodes across runs.
-- Input files must be contained in a directory where it is the ONLY *.fastq.gz (it is recommended to create a new directory for the input raw reads).
+Barcode file containing ML2100 indexes that are used.
+- IMPORTANT
+	- To reduce the chance of misclassification during demultiplexing, one barcode file containing ONLY THE USED/EXPECTED barcodes should be used. 
+	- The pipeline provides a file containing all 96 barcodes (/barcodes/ML_custom_sequences_withRC.fasta), the user can subset this based on the barcodes that were used. 
 
 
 ## Output Files
@@ -91,7 +100,7 @@ IMPORTANT
 3. Trimming of Nanopore adapters: porechop
 4. Trimming of Molecular Loop UMIs and arms: cutadapt
 5. Quality assessment of trimmed reads: NanoPlot
-6. Alignment against all gene targets (n=20): Minimap2
+6. Alignment against all gene targets (n=17): Minimap2
 7. Filter out empty alignments & separate into one alignment per barcode and target: samtools
 8. Call consensus sequences for each individual target: ViralConsensus
 9. Calculate genome coverage and collate results table: samtools
@@ -105,9 +114,9 @@ git clone https://github.com/tdunham19/CSU_ML_Respiratory_Panel.git
 
 2. Test the pipeline to ensure that it is working correctly: [Test Pipeline](#Test-Pipeline)
 
-3. Run the pipeline: The user MUST specify which reference and barcode files to use and where the input fastq files are located. The user has the option to specify the output directory.
+3. Run the pipeline: The user MUST specify which barcode file to use and where the input fastq files are located. The user has the option to specify the output directory.
 ```
-nextflow run main.nf --fastq_dir --barcode --reference --outdir
+nextflow run main.nf --fastq_dir --barcode --outdir
 ```
 
 
@@ -129,7 +138,7 @@ control(^) C
 
 - To resume the run add the -resume option
 ```
-nextflow run main.nf --fastq_dir --barcode --reference -resume
+nextflow run main.nf --fastq_dir --barcode -resume
 ```
 
 ## Software Versions
