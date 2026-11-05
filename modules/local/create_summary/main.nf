@@ -47,10 +47,10 @@ process CREATE_SUMMARY {
             print "No"
     }')
 
-   echo -e "Sample\\tTarget\\tReads_Aligned\\tGenome_Coverage\\tConclusion" \
+   echo -e "Sample\\tTarget\\tRefSeq_Length\\tReads_Aligned\\tConsensus_Length\\tGenome_Coverage\\tConclusion" \
     > ${meta.id}_${meta.target}_summary.tsv
 
-   echo -e "${meta.id}\\t${meta.target}\\t\$READS\\t\$COVERAGE\\t\$CONCLUSION" \
+   echo -e "${meta.id}\\t${meta.target}\\t\$REF_LEN\\t\$READS\\t\$CONS_LEN\\t\$COVERAGE\\t\$CONCLUSION" \
     >> ${meta.id}_${meta.target}_summary.tsv
     """
 }
