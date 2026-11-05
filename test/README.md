@@ -4,7 +4,7 @@ This directory contains a small test dataset.
 
 The test dataset was created from a control run containing BVDV2 and HVC-1 controls. 
 
-Additionally metadata for the samples is included here with accession numbers from when this was originally sequenced in 2018: [test metadata](./test_metadata.xlsx)
+Additionally metadata for the samples is included here: [test metadata](./test_metadata.xlsx)
 
 These datasets include:
 
