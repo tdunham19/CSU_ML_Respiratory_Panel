@@ -15,6 +15,7 @@ This workflow screens for 12 different respiratory pathogens covering 20 differe
 - [Output Files](#Output-Files)
 - [Workflow Steps](#Workflow-Steps)
 - [Running the Pipeline](#Running-the-Pipeline)
+- [Test Pipeline](#Test-Pipeline)
 - [Stopping and Resuming](#Stopping-and-Resuming)
 - [Software Versions](#Software-Versions)
 - [Dependencies](#Dependencies)
@@ -100,9 +101,21 @@ IMPORTANT
 git clone https://github.com/tdunham19/CSU_ML_Respiratory_Panel.git
 ```
 
-2. Run the pipeline: The user MUST specify which reference and barcode files to use and where the input fastq files are located. The user has the option to specify the output directory.
+2. Test the pipeline to ensure that it is working correctly: [Test Pipeline](#Test-Pipeline)
+
+3. Run the pipeline: The user MUST specify which reference and barcode files to use and where the input fastq files are located. The user has the option to specify the output directory.
 ```
 nextflow run main.nf --fastq_dir --barcode --reference --outdir
+```
+
+
+# Test Pipeline
+
+To test if the pipeline is working properly the pipeline is provided with a small test file. 
+
+The testing is successful if the pipeline completes all steps with no errors.
+```
+nextflow run main.nf -profile test
 ```
 
 
