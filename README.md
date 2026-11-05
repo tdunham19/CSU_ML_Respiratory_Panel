@@ -1,8 +1,11 @@
+# ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipeline_Subway.png)
+
 [![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
 [![Singularity](https://img.shields.io/badge/Singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
-The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read sequences produced by the 'CSU Molecular Loop Nanopore Workflow'.  
+The CSU_ML_Respiratory_Panel Nextflow pipeline is meant to analyze long read sequences produced by the 'CSU Molecular Loop Nanopore Workflow'. 
+This workflow screens for 12 different respiratory pathogens covering 20 different gene targets. 
 
 CSU Molecular Loop Nanopore Workflow: 
 - [Molecular Loop Protocol](https://molecularloop.com/wp-content/uploads/2026/09/Multiplex-Viral-RNA-Target-Capture-Protocol_ONT_v1.0.pdf)
