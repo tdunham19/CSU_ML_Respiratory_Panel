@@ -4,6 +4,7 @@ nextflow.enable.dsl=2
 
 // include modules from nf-core
 include { DEMUX											 	 	  } from '../modules/nf_core/cutadapt/demux_main.nf'
+include { COUNT_DEMUX_READS									 	  } from '../modules/local/count_demux_reads/main.nf'
 include { NANOPLOT as NANOPLOT_PRE_TRIM					 	 	  } from '../modules/nf_core/nanoplot/main.nf'
 include { PORECHOP										 	 	  } from '../modules/nf_core/porechop/main.nf'
 include { TRIM_UMIS										 	 	  } from '../modules/nf_core/cutadapt/trim_umis_main.nf'
@@ -71,12 +72,23 @@ workflow NANOPORE_WORKFLOW {
         tuple(new_meta, read)
         }
     }
+    
+  // count the number of reads in each demultiplexed file  
+  COUNT_DEMUX_READS( demux_reads )
+  
+  // filter out files with less than params.min_demux_reads
+  filtered_demux_reads = COUNT_DEMUX_READS.out.filter { meta, fastq, count_file ->
+        (count_file.text.trim() as Integer) >= params.min_demux_reads
+        }
+          .map { meta, fastq, count_file ->
+          tuple(meta, fastq)
+          } 
   
   // run Nanoplot on demuxed fastq files
-  NANOPLOT_PRE_TRIM ( demux_reads )
+  NANOPLOT_PRE_TRIM ( filtered_demux_reads )
   
   // trim adapters using porechop
-  PORECHOP ( demux_reads )
+  PORECHOP ( filtered_demux_reads )
   
   // trim UMIs using cutadapt
   TRIM_UMIS ( PORECHOP.out.reads )
