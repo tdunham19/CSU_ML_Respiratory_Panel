@@ -169,28 +169,21 @@ workflow NANOPORE_WORKFLOW {
     }
   
   // create summary channel
-  summary_input =
-    CLEAN_BAM_HEADER.out.bam
-        .map { meta, bam ->
-            tuple(meta.target, meta, bam)
+  bam_consensus =
+    CLEAN_BAM_HEADER.out.bam.map { meta, bam -> tuple("${meta.id}|${meta.target}", meta, bam)
         }
-        .join(
-            INDIVIDUAL_CONSENSUS_SEQUENCE_FILTERED
-                .map { meta, fasta ->
-                    tuple(meta.target, fasta)
+        .join(INDIVIDUAL_CONSENSUS_SEQUENCE_FILTERED.map { meta, fasta -> tuple("${meta.id}|${meta.target}", fasta)
                 }
         )
-        .combine(
-            individual_references
-                .map { meta, ref ->
-                    tuple(meta.target, ref)
+
+  summary_input = bam_consensus.map { key, meta, bam, consensus -> tuple(meta.target, meta, bam, consensus)
+        }
+        .combine(individual_references.map { meta, reference -> tuple(meta.target, reference)
                 }
         )
-        .filter { target1, meta, bam, consensus, target2, reference ->
-            target1 == target2
+        .filter { target1, meta, bam, consensus, target2, reference -> target1 == target2
         }
-        .map { target1, meta, bam, consensus, target2, reference ->
-            tuple(meta, bam, consensus, reference)
+        .map { target1, meta, bam, consensus, target2, reference -> tuple(meta, bam, consensus, reference)
         }
              		  
   // create final summary table for each sample then merge into one with all samples
