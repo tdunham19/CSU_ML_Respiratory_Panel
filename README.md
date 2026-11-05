@@ -1,4 +1,4 @@
-# ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipeline_Subway.png)
+# ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipeline_Subway_no_tsv.png)
 
 [![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
 [![Singularity](https://img.shields.io/badge/Singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
@@ -53,6 +53,18 @@ CSU Molecular Loop Nanopore Workflow:
 
 
 ## Output Files
+- aligned_to_ref
+	- *.bam containing reads aligned to each gene target (refseq)
+- consensus_sequences
+	- *.fa containing consensus sequence generated for each gene target
+- final_trimmed_reads
+	- *.fastq.gz containing preprocessed reads (demultiplexed & trimmed adapters, UMIs, and arms)
+- individual_references
+	- *.fa containing individual reference sequences used for each gene target
+- quality_control
+	- *.html containing nanoplot reports (pre and post trimming)
+- final_summary.tsv
+# ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipelipeline_TSV_Output.png)
 
 
 ## Workflow Steps
