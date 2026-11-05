@@ -55,9 +55,11 @@ This workflow screens for 12 different respiratory pathogens covering 20 differe
 ## Pipeline Overview
 The CSU_ML_Respiratory_Panel is a nextflow pipeline that will perform demultiplexing, trimming, alignment, and consensus generation of Nanopore sequence data generated using the [CSU Molecular Loop Nanopore Workflow](#CSU-Molecular-Loop-Nanopore-Workflow). 
 - Demultiplexing is necessary in this workflow as there is no way to demultiplex the custom ML2100 indexes during Nanopore sequencing.
+	- Demultiplexed files are filtered and only barcodes with 20 reads or more are kept for downstream analysis. If users want demultiplexing to be more or less stringent they can modify these settings in the nextflow.config file (params.min_demux_reads). 
+	- One input *.fastq.gz should be used at a time unless unique ML2100 indexes are used across runs.
 - Preprocessing via trimming of the Nanopore adapters (porechop), molecular loop UMIs (cutadapt), and molecular loop arms (cuadapt) is also necessary. Final trimmed reads are provided for any further analysis.
 - Alignment is performed against 20 different gene targets (See [Assay Targets](#Assay-Targets)) and consensus sequences are generated from each individual target alignments. 
-	- The pipeline generates consensus sequences using the following thresholds: minimum quality score of 5, depth of 2, and frequency of 0.25. Users can modify these settings in the nextflow.config file.
+	- The pipeline generates consensus sequences using the following thresholds: minimum quality score of 5, depth of 2, and frequency of 0.25. Users can modify these settings in the nextflow.config file (nanopore_min_qual, nanopore_min_depth, & nanopore_min_freq).
 
 
 ## Input Files
