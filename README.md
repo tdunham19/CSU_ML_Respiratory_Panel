@@ -1,7 +1,7 @@
 # ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipeline_Subway_no_tsv.png)
 
-[![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-=%24.10.6-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/Nextflow%20DSL2-0DC09D?logo=nextflow&logoColor=fff&style=flat-square-=24.10.6-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-=24.10.6-23aa62.svg)](https://www.nextflow.io/)
 [![Singularity](https://img.shields.io/badge/Singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
