@@ -1,6 +1,7 @@
 # ![tdunham19/CSU_ML_Respiratory_Panel](docs/images/CSU_ML_Nanopore_Pipeline_Subway_no_tsv.png)
 
 [![Nextflow](https://img.shields.io/badge/Nextflow-0DC09D?logo=nextflow&logoColor=fff&style=flat-square)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-=%24.10.6-23aa62.svg)](https://www.nextflow.io/)
 [![Singularity](https://img.shields.io/badge/Singularity-1d355c.svg?labelColor=9966ff)](https://sylabs.io/docs/)
 
 # Colorado State University Molecular Loop Respiratory Pathogen Panel Pipeline
@@ -114,7 +115,12 @@ git clone https://github.com/tdunham19/CSU_ML_Respiratory_Panel.git
 
 2. Test the pipeline to ensure that it is working correctly: [Test Pipeline](#Test-Pipeline)
 
-3. Run the pipeline: The user MUST specify which barcode file to use and where the input fastq files are located. The user has the option to specify the output directory.
+3. Set the supported version of Nextflow (v24.10.6):
+```
+export NXF_VER=24.10.6
+```
+
+4. Run the pipeline: The user MUST specify which barcode file to use and where the input fastq files are located. The user has the option to specify the output directory.
 ```
 nextflow run main.nf --fastq_dir --barcode --outdir
 ```
@@ -125,6 +131,12 @@ nextflow run main.nf --fastq_dir --barcode --outdir
 To test if the pipeline is working properly the pipeline is provided with a [test file](/test/). 
 
 The testing is successful if the pipeline completes all steps with no errors.
+
+Before testing, set the supported version of Nextflow (v24.10.6):
+```
+export NXF_VER=24.10.6
+```
+Run test profile:
 ```
 nextflow run main.nf -profile test
 ```
@@ -155,5 +167,5 @@ nextflow run main.nf --fastq_dir --barcode --outdir -resume
 
 ## Dependencies
 To run the pipeline the user will need to be working on a computer that has nextflow and singularity installed. It is recommended to install nextflow and singularity in a conda environment. 
-- There is no specified version of Nextflow for this pipeline. The pipeline has been tested with Nextflow v24.10.6 [Installation - Nextflow Documentation](https://www.nextflow.io/docs/latest/install.html). 
+- This pipeline requires Nextflow v24.10.6 [Installation - Nextflow Documentation](https://www.nextflow.io/docs/latest/install.html). 
 - The pipeline requires singularity v3.8.6 or newer [Installation - conda-forge/singularity](https://anaconda.org/channels/conda-forge/packages/singularity/overview). 
