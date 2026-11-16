@@ -3,7 +3,7 @@
 
 process PORECHOP {
     tag "$meta.id"
-    // label 'process_medium'
+    label 'process_high'
     label "no_publish"
 
     conda "${moduleDir}/environment.yml"

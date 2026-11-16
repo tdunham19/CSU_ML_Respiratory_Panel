@@ -1,5 +1,7 @@
 work/
 results/
+barcode/
+fastq/
 .nextflow.lo*
 /.nextflow/
 *.fa
