@@ -3,7 +3,7 @@
 
 process DEMUX {
     tag "$meta.id"
-    // label 'process_medium'
+    label 'process_high'
     label "no_publish"
 
     conda "${moduleDir}/environment.yml"
@@ -34,6 +34,7 @@ process DEMUX {
         -g file:$barcode \\
         --action=none \\
         -e 0 \\
+        -O 24 \\
         --no-indels \\
         -o {name}_demux.fastq.gz \\
         --untrimmed-output ${prefix}_unclassified.fastq.gz \\
